@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "Nginx",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -194,8 +195,10 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "faff650401ddd9a5",
+  "active": "9bb03d19900f8278",
   "lastOpenFiles": [
+    "Pasted image 20251117214011.png",
+    "Pasted image 20251117214003.png",
     "Nginx.md",
     "Untitled 2.base",
     "Untitled 1.base",
