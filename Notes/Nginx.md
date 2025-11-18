@@ -62,11 +62,64 @@ Create html file and write which web-page
 ```
 sudo vi index.html
 ```
+html content
+```
+<html>
+		<body>
+				<h1>This is hb website</h1>
+		</body>
+</html?				
+```
 Nginx make and website configure
 ```
 cd /etc/nginx/
 ```
 Make copy backup file of Nginx.conf
 ```
-cp nginx.conf nginx.conf_bkp
+sudo cp nginx.conf nginx.conf_bkp
 ```
+Delete nginx.config and again make
+```
+sudo rm nginx.conf
+sudo vi nginx.conf
+```
+Content write
+/server which website related information, website who port listen.
+```
+events{}
+http{
+      server{ 
+               listen 80;
+               root /user/share/nginx/html/hb.com/;
+      }
+}
+```
+
+Configuration syntax check
+```
+sudo nginx -t
+```
+When syntax change then update 
+```
+sudo systemctl reload nginx.service
+sudo systemctl status nginx.service
+```
+ Directory make
+```
+sudo mkdir about
+cd about
+```
+ about which copy index.html, previous location html file copy in about 
+ ```
+sudo cp ../index.html . 
+ ```
+ 
+ Content about/index.html
+ ```
+<html>
+		<body>
+				<h1>This is about section</h1>
+		</body>
+</html?				 
+ ``` 
+ 
