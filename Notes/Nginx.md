@@ -1,3 +1,65 @@
 ![[Pasted image 20251117214011.png]]
 Nginx use for website Host, Custom Domain enable and Website secure. Nginx work for delivery. 
+![[Pasted image 20251118151449.png]]
+Terminal open in Server
+
+For install Nginx
+```
+sudo apt-get install nginx -y
+```
+Nginx start
+```
+sudo systemctl start nginx
+```
+status check
+```
+sudo systemctl status nginx
+```
+
+When it working then show active and running.
+Check browser which write public -IP and screen display Welcome to nginx.
+Enable HTTP service in firewalld
+```
+sudo firewall-cmd --permanent --add-service=http
+```
+Or
+```
+sudo firewall-cmd --permanent --add-p=80
+```
+Nginx Configure # Nginx config location
+```
+cd /etc/nginx/
+ls
+```
+For read app or read with vi or nano 
+```
+less nginx.conf
+```
+
+Config basic structure
+![[Pasted image 20251118163014.png]]
+Nginx http type request listen or work, server your website content where and who port listen.
+![[Pasted image 20251118163735.png]]
+
+Hosting Our Own Static Website
+Enter in html
+```
+cd /user/share/nginx/html/
+```
+All files for delete in html
+```
+sudo rm -rf *
+```
+Directory create of Domain-name
+```
+sudo mkdir hb.com
+```
+Directory which enter
+```
+cd hb.come
+```
+Create html file and write which web-page
+```
+sudo vi index.html
+```
 
