@@ -20,12 +20,42 @@ When it working then show active and running.
 Check browser which write public -IP and screen display Welcome to nginx.
 Enable HTTP service in firewalld
 ```
-sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --permanent --add-service
 ```
 Or
 ```
 sudo firewall-cmd --permanent --add-p=80
 ```
+when you setup in local
+# How to open port 80 and 443 on Ubuntu
+
+### Step 1: Check if UFW is installed
+sudo ufw status # for status if inactive then
+
+
+```
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+```
+OR allow web services:
+
+`sudo ufw allow 'Nginx Full'`
+
+This automatically opens both 80 and 443.
+Step 3: Enable UFW (only if it is inactive)
+```
+sudo ufw enable
+```
+If you want to verify open ports
+```
+sudo ufw status
+```
+If you want to check which firewall you have
+```
+sudo systemctl status ufw
+sudo systemctl status firewalld
+```
+
 Nginx Configure # Nginx config location
 ```
 cd /etc/nginx/
