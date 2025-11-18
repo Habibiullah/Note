@@ -62,4 +62,11 @@ Create html file and write which web-page
 ```
 sudo vi index.html
 ```
-
+Nginx make and website configure
+```
+cd /etc/nginx/
+```
+Make copy backup file of Nginx.conf
+```
+cp nginx.conf nginx.conf_bkp
+```
