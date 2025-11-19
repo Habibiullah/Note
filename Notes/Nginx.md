@@ -26,7 +26,7 @@ Or
 ```
 sudo firewall-cmd --permanent --add-p=80
 ```
-when you setup in local
+ #  **when you setup in local**
 # How to open port 80 and 443 on Ubuntu
 
 ### Step 1: Check if UFW is installed
@@ -66,6 +66,8 @@ For read app or read with vi or nano
 less nginx.conf
 ```
 
+
+Server which
 Config basic structure
 ![[Pasted image 20251118163014.png]]
 Nginx http type request listen or work, server your website content where and who port listen.
@@ -546,6 +548,11 @@ http{
 ```
 sudo systemctl reload nginx.service
 
-
-
-
+**Nginx Configure Custom Domain**
+Custom Domain configure
+Register a domain name.
+In DNS settings, create a A record and point to public IP of our server (EC2).
+IN nginx.conf, server block, use
+   &server_name www.hb.com
+(Hostinger through buy domain), (Domain purchasing)
+   
