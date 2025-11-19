@@ -42,7 +42,7 @@ OR allow web services:
 `sudo ufw allow 'Nginx Full'`
 
 This automatically opens both 80 and 443.
-Step 3: Enable UFW (only if it is inactive)
+Enable UFW (only if it is inactive)
 ```
 sudo ufw enable
 ```
