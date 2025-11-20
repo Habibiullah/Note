@@ -507,45 +507,36 @@ error.html
 ```
 After make index.html and styles.css   # cd ..    and edit nginx.config 
  sudo nano /nginx/nginx.conf/
+ Setup MIME Types
+ sudo less mime.types
  ```
- events{}
+ events{
+	worker_connections 1024; 
+}
 http{
-      server{ 
-               listen 80;
-               root /user/share/nginx/html/hb.com/;
-      }
-      #zn.com
-      server{
+		include mime.types;
+	    server{ 
+			    s
+                listen 80;
+                root /user/share/nginx/html/hb.com/;
+                index index.html;
+        }
+        #zn.com
+        server{ 
+		        server_name zn.com;
                 listen 80;
                 root /user/share/nginx/html/zn.com/;
-      }
+        }
 }
  ```
 check syntax and reload file
 sudo nginx -t
 sudo systemctl reload nginx.service
- 
+
+zn.com folder which add files      *index.html , styles.css*
+
  # Fixing styles.css
- Setup MIME Types
- sudo less mime.types
-setup css
-sudo nano nginx.conf
-```
- events{}
-http{ 
-        include mime.types;
-        server{ 
-                listen 80;
-                root /user/share/nginx/html/hb.com/;
-        }
-        #zn.com
-        server{
-                listen 80;
-                root /user/share/nginx/html/zn.com/;
-                index index.html;
-        }
-}
-```
+ 
 sudo systemctl reload nginx.service
 
 **Nginx Configure Custom Domain**
