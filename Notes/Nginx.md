@@ -518,14 +518,14 @@ http{
 	    server{ 
 			    s
                 listen 80;
-                root /user/share/nginx/html/hb.com/;
+                root /var/www/html/hb.com/;
                 index index.html;
         }
         #zn.com
         server{ 
 		        server_name zn.com;
                 listen 80;
-                root /user/share/nginx/html/zn.com/;
+                root /var/www/html/zn.com/;
         }
 }
  ```
@@ -546,4 +546,7 @@ In DNS settings, create a A record and point to public IP of our server (EC2).
 IN nginx.conf, server block, use
    &server_name www.hb.com
 (Hostinger through buy domain), (Domain purchasing)
+
+
+
    
