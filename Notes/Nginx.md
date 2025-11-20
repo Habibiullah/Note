@@ -604,11 +604,316 @@ error_log /var/log/nginx/zn.com.error.log;
 
 }
 ```
+sudo nginx -t
+sudo systemctl reload nginx.service
+sudo systemctl status nginx.service
+
+For logs check
+```
+cd /var/log/nginx
+ls -ltr
+```
+
+Nginx Conf which some changing
+
+```
+events{
+
+worker_connections 1024;
+
+}
+
+http{
+
+include mime.typs;
+
+  
+
+server{
+
+s
+
+listen 8080;
+
+root /var/www/html/abg-store.com/index.html;
+
+index index.html;
+
+}
+
+  
+
+server{
+
+server_name zn.com www.vsttechnologies.com;
+
+listen 80;
+
+root /var/www/html/zn.com/;
+
+index index.html;
+
+  
+
+error_page 404 /error.html;
+
+location / {
+		try_files $uri $uri/ =404;
+}
+  
+
+access_log /var/log/nginx/zn.com.access.log;
+
+error_log /var/log/nginx/zn.com.error.log;
+
+}
+
+}
+```
+Again reload nginx conf
+
+                **Nginx Enable HTTPS**
+
+HTTPS Setup
+HTTPS is a secure version of HTTP that encrypts data between your browser and a website, making it safe from hackers.    
+It usses SSL/TLS to protect sensitive information like passwords and credit card details.
+
+**For MAC**
+```
+brew install certbot
+```
+**For Windows**
+```
+choco install certbot -y
+```
+**For Linux**
+   Centos
+   ```
+   sudo yum install epel-release -y
+   Or
+   sudo yum install certbot pythone3-certbot-nginx -y
+   ```
+   Ubuntu
+   ```
+   sudo apt install certbot python3-certbot-nginx -y
+   ```
+
+**SSL /TLS**
+   SSL is Secure Sockets Layer /Transport Layer Security
+Cryptographic protocols designed to provide secure communication over  computer network.
+TLS is the successor to SSL. TLS is latest version of SSL and use for security purpose.
+**How SSL/TLS Secure data**
+Encrypt data between client and server. (one point to another point which communication )
+Encrypt data and ensure its
+SSL/TLS three principles confidentiality, integrity and authenticity and principles archives use three methods encryption, hashing and certificates.
 
 
-
-
-
-
-
+==Confidentiality==  Data is only accessed by client/server           ==Encryption==
+                                            
+==Integrity==             Data is not modified in between                     ==Hashing== 
+		     			                 
+==Authenticity==     Verifying the identity of the parties                ==Certificates==
+		     who they are supposed to be
+ 
+**Encyption**
+          Converting plaintext information into a coded form (cipher text).
+          (msg change other form, the other person access but not read msg).
+          For example my message is DEMO -->GHPR  i am changing DEMO in GHPR (Cipher text, each character shifted by 3 char)
+Encrypt   message is         DEMO -->GHPR
+        shifting each char by 3 forward            
+Decrypt  message is        GHPR --> DEMO
+        shift each char by 3 backward
+*Encrypt 2 types
+   1) Symmetric                  2) Asymmetric
    
+**Symmetric** 
+Encrypt   message is         DEMO -->GHPR
+   key=3    shifting each char by 3 forward            
+Decrypt  message is        GHPR --> DEMO
+   key=3   shift each char by 3 backward
+**Asymmetric**
+Encrypt   message is         DEMO -->GHPR
+   key=3    shifting each char by 3 forward            
+Decrypt  message is        GHPR --> DEMO
+ key=23  shift each char by 23 backward
+ Encrypt is public key
+ Decrypt is private key
+ 
+ Asymmetric encryption is used to securely exchange a symmetric key between parties.
+ Symmetric encryption is faster and more efficient making it idealfor encryptinf large amount of data.
+Some Algorithm Examples
+Asymmetric                                                                Symmetric
+  DSA                                                                             AES
+  RSA                                                                             3DES
+  ECC                                                                             RC4
+  ECDH
+
+**How real life AES encryption looks like...**
+
+**Message:** DEMO
+
+**Key 256 bit HEX:**  
+cb5a6cefcf5b7e88f9bff6f27f32d6095a86db829d8518cf8edb6af2740ff8eb
+
+**Initialization Vector (IV):**  
+a8d246bb6ebae2b0e7651843b3053384
+
+**AES-256-CBC Encryption:**  
+8?Q3?B??Z)07??h??
+
+**HASHING**
+Hashing is the process of converting data into a fixed-size string of characters, as a sequence of numbers and letters.
+**DEMO** → 37 (4 + 5 + 13 + 15 = 37)
+**Alphabet:**  
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+**MESSAGE AUTH CODE (MAC)**  
+**Combining MESSAGE + CODE**
+**Message:** DEMO  
+**Secret Key:** key123
+**DEMOkey123 → 84**
+**Alphabet:**  
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+**Most Common Hashing Algo**
+
+- **MD5** (Message Digest Algorithm 5) (128 bits)
+- **SHA** (Secure Hash Algorithm)
+    - sha-1
+    - sha-2/3 224 256 384 512
+Hmac = **Hash-based Message Authentication Code (sha256hmac)**
+ For example
+ cho DEMO | sha     
+sha1hmac    sha224hmac   sha256hmac   sha384hmac   sha512hmac
+sha1sum     sha224sum    sha256sum    sha384sum    sha512sum     /any code select 
+
+echo DEMO | sha512hmac
+1f47aed161a7befa46204f4c351fa69e2a25d39de8a36d4afc66927728279508cfb7a7bbf9c230b222dbbd56e0a26893838d3b730f34ac2a1f7e26ad1a9ea6c
+
+**Authentication**
+**CA**     is certificate authority
+**A Certificate Authority (CA)** is a trusted organization that issues digital certificates to verify the identity of websites and enable secure, encrypted communication over the internet.
+**CAs** ensure the authenticity and integrity of the SSL certificates they provide.
+
+**Formats for digital certificates**
+
+|**Format**|**Encoding**|**Common Extensions**|**Usage**|**Contains Private Key**|
+|---|---|---|---|---|
+|PEM|Base64|.pem, .crt, .cer|Web servers, email|No (unless it’s a key file)|
+|DER|Binary|.der, .cer|Java platforms, binary data handling|No|
+|PKCS#7|Base64 or Binary|.p7b, .p7c|Certificate chains|No|
+|PKCS#12|Binary|.p12, .pfx|Export/import certs with keys|Yes|
+Setup in Server
+Terminal open in Server
+
+For install Nginx
+```
+sudo apt-get install nginx -y
+```
+Nginx start
+```
+sudo systemctl start nginx
+```
+status check
+```
+sudo systemctl status nginx
+```
+
+When it working then show active and running.
+Check browser which write public -IP and screen display Welcome to nginx.
+Enable HTTP service in firewalld
+```
+sudo firewall-cmd --permanent --add-service
+```
+Or
+```
+sudo firewall-cmd --permanent --add-p=80
+```
+
+HTTP setup in ubuntu
+   ```
+   sudo apt install certbot python3-certbot-nginx -y
+   ```
+   
+
+- **First stop the nginx** (if listening on port 80) as below command will use local port 80.
+```
+sudo systemctl stop nginx.service
+```
+    
+- **To generate certificates**
+    
+    `sudo certbot certonly --standalone -d yourdomain.com`
+- **Files will be generated in**
+    
+    `/etc/letsencrypt/live/yourdomain.com/`
+
+
+Enter Email address    
+	Show public and private certificate key
+```
+listen 443 ssl http2;
+
+ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+
+ssl_protocols TLSv1.2 TLSv1.3;
+```
+
+sudo nano nginx.conf
+ ```
+events{
+
+worker_connections 1024;
+
+}
+http {
+    include mime.types;
+
+    server {
+        listen 8080;
+        /var/www/html/abg-store.com/index.html;
+    }
+
+    # zn.com
+    server {
+        server_name zn.com www.vsttechnologies.com;
+
+        listen 443 ssl http2;
+
+        root /var/www/html/zn.com/;
+
+        index index.html;
+        
+
+    ssl_certificate /etc/letsencrypt/live/myexamplewebsite.xyz/fullchain.pem;
+	ssl_certificate_key/etc/letsencrypt/live/myexamplewebsite.xyz/privkey.pem;
+
+	ssl_protocols TLSv1.2 TLSv1.3;
+	
+        error_page 404 /404.html;
+
+        location / {
+            try_files $uri $uri =404;
+        }
+
+        access_log /var/log/nginx/zn.com.access.log;
+
+        error_log /var/log/nginx/zn.com.error.log;
+
+    }
+}
+
+ 
+ ```
+sudo nginx -t
+sudo systemctl start nginx.service
+sudo systemctl status nginx.service
+CDN77 website through 
+ 
+**let's Encrypt  group provide free certificate and  Go Daddy and digicert**
+                 
+**Reverse Proxy**                 
+
+
+
