@@ -275,7 +275,7 @@ index.html
 </html>
 ```
 
-styles.css
+**styles.css**
 sudo nano styles.css
 content#
 ```
@@ -438,7 +438,8 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 ```
 
-error.html
+**==error.html==**
+
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -546,6 +547,67 @@ In DNS settings, create a A record and point to public IP of our server (EC2).
 IN nginx.conf, server block, use
    &server_name www.hb.com
 (Hostinger through buy domain), (Domain purchasing)
+DNS setup
+
+     Configure Eroor Page and Logs
+Add website folder which error.html file and content write.
+Create error.html or 404.html    #samething
+configure nginx.conf
+```
+events{
+
+worker_connections 1024;
+
+}
+
+http{
+
+include mime.typs;
+
+  
+
+server{
+
+s
+
+listen 8080;
+
+root /var/www/html/abg-store.com/index.html;
+
+index index.html;
+
+}
+
+  
+
+server{
+
+server_name zn.com www.vsttechnologies.com;
+
+listen 80;
+
+root /var/www/html/zn.com/;
+
+index index.html;
+
+  
+
+error_page 404 /error.html;
+
+  
+
+access_log /var/log/nginx/zn.com.access.log;
+
+error_log /var/log/nginx/zn.com.error.log;
+
+}
+
+}
+```
+
+
+
+
 
 
 
