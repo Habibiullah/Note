@@ -11,9 +11,20 @@ Nginx start
 ```
 sudo systemctl start nginx
 ```
+s
+**Enable**
+```
+sudo systemctl enable nginx
+```
+
 status check
 ```
 sudo systemctl status nginx
+```
+
+
+```
+sudo ufw allow 'Nginx Full'
 ```
 
 When it working then show active and running.
@@ -51,10 +62,6 @@ If you want to verify open ports
 sudo ufw status
 ```
 If you want to check which firewall you have
-```
-sudo systemctl status ufw
-sudo systemctl status firewalld
-```
 
 Nginx Configure # Nginx config location
 ```
@@ -689,9 +696,9 @@ choco install certbot -y
 **For Linux**
    Centos
    ```
-   sudo yum install epel-release -y
+   sudo apt install epel-release -y
    Or
-   sudo yum install certbot pythone3-certbot-nginx -y
+   sudo apt install certbot pythone3-certbot-nginx -y
    ```
    Ubuntu
    ```
@@ -860,6 +867,22 @@ ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
 ssl_protocols TLSv1.2 TLSv1.3;
 ```
 
+***SSL**
+```
+server
+{
+listen 80;
+listen 443 ssl;
+ssl on;
+ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+access_log /var/log/nginx/zn.com.access.log;
+error_log /var/log/nginx/zn.com.error.log;
+}
+```
+
+
+
 sudo nano nginx.conf
  ```
 events{
@@ -871,8 +894,108 @@ http {
     include mime.types;
 
     server {
-        listen 8080;
-        /var/www/html/abg-store.com/index.html;
+	    server_name hbgarments.duckdns.org;
+        listen 80;
+        root /var/www/html/hbgarments.duckdns.org/index.html;
+    }
+
+    # ssl
+    server {
+        server_name hbgarments.duckdns.org www.hbgarments.duckdns.org;
+
+        listen 443 ssl http2;
+
+        root /var/www/html/hbgarments.duckdns.org/;
+
+        index index.html;
+		ssl_certificate /etc/letsencrypt/live/hbgarments.duckdns.org/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/hbgarments.duckdns.org/privkey.pem;
+
+		ssl_protocols TLSv1.2 TLSv1.3;
+        
+
+    
+	
+        error_page 404 /404.html;
+
+        location / {
+            try_files $uri $uri =404;
+        }
+
+        access_log /var/log/nginx/hbgarments.duckdns.org.access.log;
+
+        error_log /var/log/nginx/hbgarments.duckdns.org.error.log;
+
+    }
+}
+
+ 
+ ```
+sudo nginx -t
+sudo systemctl start nginx.service
+sudo systemctl status nginx.service
+CDN77 website through 
+ 
+**let's Encrypt  group provide free certificate and  Go Daddy and digicert**
+                 
+**Reverse Proxy**                 
+
+**An Nginx reverse proxy** acts as an intermediary between clients and backend servers.
+
+It forwards client requests to the appropriate server, handles responses, and provides benefits like load balancing, caching, and security.
+
+**Userdata script to install and run ubuntu Webserver**
+#!/bin/bash
+sudo apt update -y
+Install ubuntu web server (httpd) 
+sudo apt install -y httpd 
+sudo systemctl start httpd 
+sudo systemctl enable httpd  
+Create a simple HTML file to verify the web server is running 
+```
+echo "<<html><h1>This is Website 1</h1></html>" > /var/www/html/index.html
+
+```
+
+ngin.conf
+```
+events{}
+https{
+		include mime.type;
+		server{
+				listen 8080;
+		        location /{
+					proxy_pass http://instance-ip(backend public-ip)/;
+				}
+		}
+}
+```
+sudo nginx -t
+sudo systemctl reload nginx.service
+nginx server public-ip backend sever security which http  in public-ip set
+
+**Nginx Load Balancing**
+  **Nginx load balancing** is a feature where Nginx distributes incoming traffic across multiple backend servers to ensure no single server gets overloaded, improving performance, reliability, and scalability of your application.
+  Create instances for load balancing.
+  
+ ```
+ events{
+
+worker_connections 1024;
+
+}
+http {
+	    include mime.types;
+		upstream backend_servers {
+        server 127.0.0.1:3000;
+        server 127.0.0.1:3001;
+        server 127.0.0.1:3002;
+    server {
+	        listen 8080;
+	#       root /var/www/html/abg-store.com/index.html;
+            location /{
+					proxy_pass http://backend-servers/;
+			}
     }
 
     # zn.com
@@ -900,31 +1023,55 @@ http {
         access_log /var/log/nginx/zn.com.access.log;
 
         error_log /var/log/nginx/zn.com.error.log;
+} 
+```
 
+**Nginx Backup Server**
+  Backup Server will only serve in case of Primary Fail
+  ```
+  upstream backend {
+    server 192.168.1.1:3000;
+    server 192.168.1.2:3000;
+    server 192.168.1.3:3000 backup;
+}
+  ```
+
+**Nginx Timeout**
+
+
+# Frontend (Client-Side) Timeouts
+client_header_timeout 10s;
+client_body_timeout 10s;
+send_timeout 15s;
+keepalive_timeout 20s;
+
+# Backend (Upstream Server) Timeouts
+proxy_connect_timeout 5s;
+proxy_read_timeout 30s;
+proxy_send_timeout 30s;
+
+ **Nginx Catching**
+     **Nginx caching** is a process where Nginx stores copies of responses (like HTML, images, or API data) to serve them directly to users, reducing backend load and improving response times.
+     
+ Caching setup
+ ```
+ http {
+    # Define the cache path
+    proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m inactive=60m max_size=1g;
+
+    server {
+        listen 80;
+        server_name example.com;
+
+        location / {
+            proxy_cache my_cache;  # Enable caching using the defined cache
+            proxy_cache_valid 200 60m;  # Cache 200 OK responses for 60 minutes
+            proxy_cache_key "$scheme$request_uri";  # Define the cache key
+            proxy_pass http://backend_server;  # Forward requests to the backend server
+            add_header X-Cache-Status $upstream_cache_status;  # Add cache status header for debugging
+        }
     }
 }
-
- 
  ```
-sudo nginx -t
-sudo systemctl start nginx.service
-sudo systemctl status nginx.service
-CDN77 website through 
- 
-**let's Encrypt  group provide free certificate and  Go Daddy and digicert**
-                 
-**Reverse Proxy**                 
 
-**An Nginx reverse proxy** acts as an intermediary between clients and backend servers.
-
-It forwards client requests to the appropriate server, handles responses, and provides benefits like load balancing, caching, and security.
-
-**Userdata script to install and run ubuntu Webserver**
-
-sudo apt update -y
-Install ubuntu web server (httpd) 
-sudo apt install -y httpd 
-sudo systemctl start httpd 
-sudo systemctl enable httpd  
-Create a simple HTML file to verify the web server is running 
-echo "<html><h1>This is Website 1</h1></html>" > /var/www/html/index.html`
+**hbgarments.duckdns.org**
