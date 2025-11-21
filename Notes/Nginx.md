@@ -915,5 +915,16 @@ CDN77 website through
                  
 **Reverse Proxy**                 
 
+**An Nginx reverse proxy** acts as an intermediary between clients and backend servers.
 
+It forwards client requests to the appropriate server, handles responses, and provides benefits like load balancing, caching, and security.
 
+**Userdata script to install and run ubuntu Webserver**
+
+sudo apt update -y
+Install ubuntu web server (httpd) 
+sudo apt install -y httpd 
+sudo systemctl start httpd 
+sudo systemctl enable httpd  
+Create a simple HTML file to verify the web server is running 
+echo "<html><h1>This is Website 1</h1></html>" > /var/www/html/index.html`
